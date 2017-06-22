@@ -90,18 +90,18 @@
 
 
 
-<meta name="description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)  先看一下最基础的交换排序，用于理解交换的思想1234567891011static void simpleSwapSort(int[] arra">
+<meta name="description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)">
 <meta name="keywords" content="Sort,Algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="冒泡排序(Bubble Sort)">
 <meta property="og:url" content="https://spiritedrunning.github.io/2017/06/22/冒泡排序-Bubble-Sort/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
-<meta property="og:description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)  先看一下最基础的交换排序，用于理解交换的思想1234567891011static void simpleSwapSort(int[] arra">
+<meta property="og:description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)">
 <meta property="og:image" content="http://oqi78nyfk.bkt.clouddn.com/bubbl.png">
-<meta property="og:updated_time" content="2017-06-22T08:53:42.000Z">
+<meta property="og:updated_time" content="2017-06-22T08:58:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="冒泡排序(Bubble Sort)">
-<meta name="twitter:description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)  先看一下最基础的交换排序，用于理解交换的思想1234567891011static void simpleSwapSort(int[] arra">
+<meta name="twitter:description" content="冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 n(n - 1)/2 次比较和交换，复杂度是O(n^2); 最好情况下需要 n - 1 次比较, 复杂度为 O(n)">
 <meta name="twitter:image" content="http://oqi78nyfk.bkt.clouddn.com/bubbl.png">
 
 
@@ -351,6 +351,7 @@
 
       
         <p>冒泡排序是最基本的排序方法，其基本思想是两两交互，想象水中的泡泡从下往上逐渐向上，这样相邻两个比较之后，即可完成排序。 最坏情况下需要 <code>n(n - 1)/2</code> 次比较和交换，复杂度是<code>O(n^2)</code>; 最好情况下需要 <code>n - 1</code> 次比较, 复杂度为 <code>O(n)</code></p>
+<a id="more"></a>
 <p><img src="http://oqi78nyfk.bkt.clouddn.com/bubbl.png" alt=""></p>
 <p>先看一下最基础的交换排序，用于理解交换的思想<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">simpleSwapSort</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span> || array.length == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = array.length; i &lt; size; ++i) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; size; ++j) &#123;</div><div class="line">                <span class="keyword">if</span> (array[j] &lt; array[i]) &#123;</div><div class="line">                    swap(array, i, j);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
 <p>下面来看标准的冒泡排序, 即从底向上，两两冒泡，直到把最小的冒上来：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span> || array.length == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, size = array.length; i &lt; size; i++)&#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = size - <span class="number">1</span>; j &gt;= i; j--) &#123;</div><div class="line">                <span class="keyword">if</span> (array[j] &lt; array[j - <span class="number">1</span>]) &#123;</div><div class="line">                    swap(array, j, j - <span class="number">1</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
