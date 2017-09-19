@@ -97,7 +97,7 @@
 <meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
 <meta property="og:description" content="参考自：Android MediaCodec编解码详解及demo， 并有补充与完善。 英文地址： Android MediaCodeC stuff 这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑">
-<meta property="og:updated_time" content="2017-09-19T10:46:01.000Z">
+<meta property="og:updated_time" content="2017-09-19T10:48:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android MediaCodeC stuff">
 <meta name="twitter:description" content="参考自：Android MediaCodec编解码详解及demo， 并有补充与完善。 英文地址： Android MediaCodeC stuff 这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑">
@@ -354,7 +354,6 @@
 <a id="more"></a>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>MediaCodec 第一次可用是在 <strong>Android 4.1版本（API 16）</strong>，一开始是用来直接访问设备的媒体编解码器。它提供了一种极其原始的接口。MediaCodec类同时存在 Java和C++层中，但是只有前者是公共访问方法。<br>在<strong>Android 4.3（API 18）</strong>中，MediaCodec被扩展为包含一种通过 Surface 提供输入的方法（通过 createInputSurface 方法），这允许输入来自于相机的预览或者是经过OpenGL ES呈现。而且Android4.3也是 MediaCodec 的第一个经过CTS测试（Compatibility Test Suite，CTS是google推出的一种设备兼容性测试规范，用来保证不同设备一致的用户体验，同时Google也提供了一份兼容性标准文档 CDD）的 release 版本。<br>而且<strong>Android 4.3</strong>还引入了 <a href="https://developer.android.com/reference/android/media/MediaMuxer.html" target="_blank" rel="external">MediaMuxer</a>，它允许将AVC编解码器（原始H.264基本流）的输出转换为.MP4​​格式，可以和音频流一起转码也可以单独转换。<br><strong>Android 5.0（API 21）</strong>引入了“异步模式”，它允许应用程序提供一个<a href="https://developer.android.com/reference/android/media/MediaCodec.Callback.html" target="_blank" rel="external">回调方法</a>，在缓冲区可用时执行。但是整个文章链接里的代码都没有用到这个，因为兼容性保持到API 18+。</p>
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>所有的同步模式的 MediaCodec API都遵循一个模式：</p>
-<p>&gt;</p>
 <ul>
 <li>创建并配置一个 MediaCodec 对象</li>
 <li>循环直到完成；</li>
