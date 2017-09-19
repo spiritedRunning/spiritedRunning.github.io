@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MediaCodeC,Translation," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=6.1.1" />
+
+
+
+
+
+
+<meta name="description" content="参考自：Android MediaCodec编解码详解及demo， 并有补充与完善。 英文地址： Android MediaCodeC stuff 这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑">
+<meta name="keywords" content="MediaCodeC,Translation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android MediaCodeC stuff">
+<meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/index.html">
+<meta property="og:site_name" content="Zach&#39;s Blog">
+<meta property="og:description" content="参考自：Android MediaCodec编解码详解及demo， 并有补充与完善。 英文地址： Android MediaCodeC stuff 这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑">
+<meta property="og:updated_time" content="2017-09-19T10:46:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android MediaCodeC stuff">
+<meta name="twitter:description" content="参考自：Android MediaCodec编解码详解及demo， 并有补充与完善。 英文地址： Android MediaCodeC stuff 这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/"/>
+
+
+
+
+
+  <title>Android MediaCodeC stuff | Zach's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zach's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zach Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zach's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android MediaCodeC stuff</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T11:35:31+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/09/19/Android-MediaCodeC-stuff/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参考自：<a href="http://www.jianshu.com/p/e6c683d6dbbe" target="_blank" rel="external">Android MediaCodec编解码详解及demo</a>， 并有补充与完善。</p>
+<p>英文地址： <a href="http://bigflake.com/mediacodec/" target="_blank" rel="external">Android MediaCodeC stuff</a></p>
+<p>这篇文章是关于 <code>MediaCodec</code> 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。<br>在<strong>API 23</strong>之后，<a href="https://developer.android.com/reference/android/media/MediaCodec.html" target="_blank" rel="external">官方文档</a> official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在<strong>API 18</strong>及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提及。</p>
+<a id="more"></a>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>MediaCodec 第一次可用是在 <strong>Android 4.1版本（API 16）</strong>，一开始是用来直接访问设备的媒体编解码器。它提供了一种极其原始的接口。MediaCodec类同时存在 Java和C++层中，但是只有前者是公共访问方法。<br>在<strong>Android 4.3（API 18）</strong>中，MediaCodec被扩展为包含一种通过 Surface 提供输入的方法（通过 createInputSurface 方法），这允许输入来自于相机的预览或者是经过OpenGL ES呈现。而且Android4.3也是 MediaCodec 的第一个经过CTS测试（Compatibility Test Suite，CTS是google推出的一种设备兼容性测试规范，用来保证不同设备一致的用户体验，同时Google也提供了一份兼容性标准文档 CDD）的 release 版本。<br>而且<strong>Android 4.3</strong>还引入了 <a href="https://developer.android.com/reference/android/media/MediaMuxer.html" target="_blank" rel="external">MediaMuxer</a>，它允许将AVC编解码器（原始H.264基本流）的输出转换为.MP4​​格式，可以和音频流一起转码也可以单独转换。<br><strong>Android 5.0（API 21）</strong>引入了“异步模式”，它允许应用程序提供一个<a href="https://developer.android.com/reference/android/media/MediaCodec.Callback.html" target="_blank" rel="external">回调方法</a>，在缓冲区可用时执行。但是整个文章链接里的代码都没有用到这个，因为兼容性保持到API 18+。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>所有的同步模式的 MediaCodec API都遵循一个模式：</p>
+<p>&gt;</p>
+<ul>
+<li>创建并配置一个 MediaCodec 对象</li>
+<li>循环直到完成；</li>
+<li>如果输入缓冲区就绪，读取一个输入块，并复制到输入缓冲区中</li>
+<li>如果输出缓冲区就绪，复制输出缓冲区的数据</li>
+<li>释放 MediaCodec 对象</li>
+</ul>
+<p>MediaCodec的一个实例会处理一种类型的数据，（比如，MP3音频或H.264视频），编码或是解码。它对原始数据操作，所有任何的文件头，比如ID3（一般是位于一个mp3文件的开头或末尾的若干字节内，附加了关于该mp3的歌手，标题，专辑名称，年代，风格等信息，该信息就被称为ID3信息）这些信息会被擦除。它不与任何高级的系统组件通信，也不会通过扬声器来播放音频，或是通过网络来获取视频流数据，它只是一个会从缓冲区取数据，并返回数据的中间层。<br>一些编解码器对于它们的缓冲区是比较特殊的，它们可能需要一些特殊的内存对齐或是有特定的最小最大限制，为了适应广泛的可能性，buffer缓冲区分配是由编解码器自己实现的，而不是应用程序的层面。你并不需要一个带有数据的缓冲区给 MediaCodec，而是直接向它申请一个缓冲区，然后把你的数据拷贝进去。<br>这看起来和“零拷贝”原则是相悖的，但大部分情况发生拷贝的几率是比较小的，因为编解码器并不需要复制或调整这些数据来满足要求，而且大多数我们可以直接使用缓冲区，比如直接从磁盘或网络读取数据到缓冲区中，不需要复制。<br>MediaCodec的输入必须在“access units”中完成，在编码H.264视频时意味着一帧，在解码时意味着是一个NAL单元，然而，它看起来感觉更像是流，你不能提交一个单块，并期望不久后就出现，实际上，编解码器可能会在输出前入队好几个buffers。<br>这里强烈建议直接从下面的示例代码中学习，而不是直接从官方文档上手。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><strong><a href="http://bigflake.com/mediacodec/EncodeAndMuxTest.java.txt" target="_blank" rel="external">EncodeAndMuxTest.java</a> (requires 4.3, API 18)</strong><br>使用OpenGL ES生成一个视频，通过 MediaCodec 使用H.264进行编码，而且通过 MediaMuxer 将流转换成一个.MP4文件，这里通过CTS 测试编写，也可以直接转成其他环境的代码。</p>
+<p><strong><a href="http://bigflake.com/mediacodec/CameraToMpegTest.java.txt" target="_blank" rel="external">CameraToMpegTest.java</a> (requires 4.3, API 18)</strong><br>通过相机预览录制视频并且编码成一个MP4文件，同样通过 MediaCodec 使用H.264进行编码，以及 MediaMuxer 将流转换成一个.MP4文件，作为一个扩展版，还通过GLES片段着色器在录制的时候改变视频，同样是一个CTS test，可以转换成其他环境的代码。</p>
+<p><strong><a href="http://bigflake.com/mediacodec/0001-Record-game-into-.mp4.patch" target="_blank" rel="external">Android Breakout game recorder patch</a> (requires 4.3, API 18)</strong><br>这是 <a href="https://github.com/fadden/android-breakout" target="_blank" rel="external">Android Breakout</a> v1.0.2版本的一个补丁，添加了游戏录制功能，游戏是在60fps的全屏分辨率下，通过一个30fps 720p的配置使用AVC编解码器来录制视频，录制文件被保存在一个应用的私有空间，比如 ./data/data/com.faddensoft.breakout/files/video.mp4。这个本质上和 EncodeAndMuxTest.java 是一样的，不过这个是完全的真实环境不是CTS test，一个关键的区别在于EGL的创建，这种方式允许显示（display）和视频上下文(video contexts)间共享纹理。<strong>警告：这段代码有一个竞争条件, 可以查看<a href="https://github.com/google/grafika/issues/36" target="_blank" rel="external">bug细节</a>与修复建议</strong>。<br>另一种方式是渲染每个游戏帧到FBO 纹理，然后渲染全屏两次（1次用于显示，一次用于视频），这对游戏来说可能更快但渲染代价更大，这两种方法的例子可以在<a href="https://github.com/google/grafika" target="_blank" rel="external">Grafika’s RecordFBOActivity</a>类中找到。</p>
+<p><strong><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/EncodeDecodeTest.java" target="_blank" rel="external">EncodeDecodeTest.java</a> (requires 4.3, API 18)</strong><br>CTS test，总共有三种test以不同的方式做着相同的事情。每种方式包含：</p>
+<ul>
+<li>生成video的帧</li>
+<li>通过AVC进行编码</li>
+<li>生成解码流</li>
+<li>测试解码流是否和原始数据一样</li>
+</ul>
+<p>上面的生成，编码，解码，检测基本是同时的，帧被生成后，传递给编码器，编码器拿到的数据会传递给解码器，然后进行校验，三种方式分别是<br>1、Buffer到Buffer，buffers是软件生成的YUV帧数据，这种方式是最慢的，但是能够允许应用程序去检测和修改YUV数据。<br>2、Buffer到Surface，编码是一样的，但是解码会在surface中，通过OpenGL ES的 <code>getReadPixels()</code>进行校验<br>3、Surface到Surface，通过OpenGL ES生成帧并解码到Surface中，这是最快的方式，但是需要YUV和RGB数据的转换。</p>
+<p>以上测试运行在3种不同的分辨率：720p(1280x720),QCIF(176x144),and QVGA(320X240)</p>
+<p>缓冲区到缓冲区以及缓冲区到Surface的测试可在Android 4.1（API 16）构建。 因为CTS在Android 4.3以前是不存在的，一些设备被移植到不完整的实现中。</p>
+<p><em>注意：setByteBuffer() 的使用可能不是严格正确的，它没有设置“csd-1”。</em></p>
+<p>（作为一个Android 5.x使用异步API的例子，可查看mstorsjo的项目 <a href="https://github.com/mstorsjo/android-decodeencodetest" target="_blank" rel="external">android-decodeencodetest</a>）</p>
+<p><strong><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/DecodeEditEncodeTest.java" target="_blank" rel="external">DecodeEditEncodeTest.java</a> (requires 4.3, API 18)</strong><br>CTS test:</p>
+<ul>
+<li>生成一系列视频帧，通过AVC进行编码，编码数据流保存在内存中</li>
+<li>通过MediaCodec解码，使用一个输出Surface</li>
+<li>通过OpenGL ES片段着色器编辑帧数据（交换绿/蓝颜色信道）</li>
+<li>使用MediaCodeC进行帧编码，使用一个输入Surface</li>
+<li>解码编辑后的视频流，验证输出。</li>
+</ul>
+<p>这中间 解码-编辑-编码 的过程展示了编解码的过程是几乎同步的， 帧数据直接从解码器到编码器，视频数据保存在内存中，初始化生成和最终的验证是分开传递的。</p>
+<p>以上测试运行在3种不同的分辨率：720p(1280x720),QCIF(176x144),and QVGA(320X240)</p>
+<p>没有软解释（software-interpreted）的YUV缓冲区被使用，一切都通过Surface实现。在特定点会有RGB和YUV之间的转换，有多少以及在哪转换取决于驱动是如何实现的。</p>
+<p><strong>注意：对于这个以及其他CTS测试，你可以通过编辑相关类的URL来查看其他的类。例如要查看InputSurface和OutputSurface, 可从URL中移除“DecodeEditEncodeTest.java”， 进入这个<a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/" target="_blank" rel="external">链接</a>。</strong></p>
+<p><strong><a href="http://bigflake.com/mediacodec/ExtractMpegFramesTest.java.txt" target="_blank" rel="external">ExtractMpegFramesTest.java</a> (requires 4.1, API 16)<br><a href="http://bigflake.com/mediacodec/ExtractMpegFramesTest_egl14.java.txt" target="_blank" rel="external">ExtractMpegFramesTest.java</a> (requires 4.2, API 17)</strong><br>提取一个.mp4视频文件的开始10帧，并保存到 /sdcard/目录的一个单独的PNG文件中，使用 <a href="https://developer.android.com/reference/android/media/MediaExtractor.html" target="_blank" rel="external">MediaExtractor</a> 提取 CSD 数据，并将单个 access units给 MediaCodec 解码器，帧被解码到一个通过<a href="https://developer.android.com/reference/android/graphics/SurfaceTexture.html" target="_blank" rel="external">SurfaceTexture</a>创建的surface中，离屏渲染到pbuffer，并通过 glReadPixels() 拿到数据后使用 Bitmap#compress() 保存成一个PNG 文件。</p>
+<p>解码帧并将其使用glReadPixels()拷贝到ByteBuffer, 30fps作为输入，是简单高效的，在Nexus 5上只耗费8ms,但额外的步骤，将其最为PNG保存到磁盘上是比较耗时的（大约要半秒）。保存一帧大约需要的开销（你可以通过修改测试从Nexus 5的720p视频中提取一个全尺寸的帧，观察保存10帧需要的总时间，并且以下阶段被移除后做连续的测试，或者通过 <a href="https://developer.android.com/reference/android/os/Trace.html" target="_blank" rel="external">android.os.Trace</a> 以及<a href="http://bigflake.com/systrace/" target="_blank" rel="external">systrace</a>）:</p>
+<ul>
+<li>0.5% 视频解码</li>
+<li>1.5% glReadPixels() into a direct ByteBuffer</li>
+<li>1.5% 从ByteBuffer到Bitmap拷贝像素数据</li>
+<li>96.5% PNG压缩以及文件I/O</li>
+</ul>
+<p>理论上来说， 自API 19以来，一个Surface ImageReader类可被传递到MediaCodeC解码器，允许直接访问YUV数据。作为Android 4.4, MediaCodeC解码器格式不支持ImageReader.</p>
+<p>一种加速传递RGB数据的方式是通过一个 <a href="https://www.khronos.org/opengl/wiki/Pixel_Buffer_Object" target="_blank" rel="external">PBO</a>异步拷贝数据，但在当前实现中因为随后的PNG活动，传输时间是相形见绌的，所以这样做的价值很小。</p>
+<p>这两个版本的代码功能是相同的，一个用于EGL 1.0, 一个用于EGL 1.4. EGL 1.4使用更简单，并且有一些特性是其它例子使用的。但如果你的应用想在Android 4.1下工作，你就不能用了。</p>
+<p>这个被用于一个CTS测试，但它不是CTS的一部分，它应该直接适用于其它环境的代码。(注意：如果在<code>awaitNewImage()</code>遇到了超时的问题，看这篇<a href="https://stackoverflow.com/questions/22457623/surfacetextures-onframeavailable-method-always-called-too-late" target="_blank" rel="external">文章</a>)。</p>
+<p><strong><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/DecoderTest.java" target="_blank" rel="external">DecoderTest.java</a> (requires 4.1, API 16)</strong><br>CTS test. 测试解码预录制的音频流。</p>
+<p><strong><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/EncoderTest.java" target="_blank" rel="external">EncoderTest.java</a> (requires 4.1, API 16)</strong><br>CTS test. 测试音频流编码。</p>
+<p><strong><a href="https://android.googlesource.com/platform/cts/+/kitkat-release/tests/tests/media/src/android/media/cts/MediaMuxerTest.java" target="_blank" rel="external">MediaMuxerTest.java</a> (requires 4.3, API 18)</strong><br>CTS test. 使用MediaMuxer克隆音、视频轨道，并将音视频轨道从输入换到输出。</p>
+<p><strong><a href="http://www.bigflake.com/screenrecord/" target="_blank" rel="external">screenrecord</a> (uses non-public native APIs)</strong><br>你可以访问screenrecord的源码，开发者shell command被引入<strong>Android 4.4(API 19)</strong>。它说明了MediaCodeC在native中的等价使用方法以及MediaMuxer在纯native命令行中的使用。v1.1 使用了GLES以及native中SurfaceTexture的等价方法。<br>这个只是用来作为参考。非共有API方法在release版本中可能不生效，并无法保证在不同设备间的行为一致性。</p>
+<p><strong><a href="https://github.com/google/grafika" target="_blank" rel="external">Grafika</a> (requires 4.3, API 18)</strong><br>测试各种不同的图形以及多媒体特征的应用。例子包含了录制以及显示camera preview, 录制 OpenGL ES rendering, 同步解码多个视频，以及SurfaceView, GLSurfaceView, TextureView的使用。极不稳定，用来愉快的玩耍吧。不像这里的大部分例子，Grafika是一个完整的应用，所以你可以用它来更容易的做一些尝试。EGL/GLES代码也被重定义，可以更方便的包含在其他工程中。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="Q1-我怎么播放一个由MediaCodec创建的“video-avc”格式的视频流？"><a href="#Q1-我怎么播放一个由MediaCodec创建的“video-avc”格式的视频流？" class="headerlink" title="Q1:我怎么播放一个由MediaCodec创建的“video/avc”格式的视频流？"></a>Q1:我怎么播放一个由MediaCodec创建的“video/avc”格式的视频流？</h3><p>A1.这个被创建的流是原始的H.264流数据，Linux的Totem Movie Player可以播放，但大部分其他的都播放不了，你可以使用 MediaMuxer 将其转换为MP4文件，看前面的EncodeAndMuxTest例子。</p>
+<h3 id="Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？"><a href="#Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？" class="headerlink" title="Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？"></a>Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？</h3><p>A2.这通常是因为你没有指定所有编码器需要的关键命令，可以看一个这个例子 this stackoverflow item。</p>
+<h3 id="Q3-我的视频解码器配置好了但是不接收数据，这是为什么？"><a href="#Q3-我的视频解码器配置好了但是不接收数据，这是为什么？" class="headerlink" title="Q3:我的视频解码器配置好了但是不接收数据，这是为什么？"></a>Q3:我的视频解码器配置好了但是不接收数据，这是为什么？</h3><p>A3.一个比较常见的错误就是忽略设置<code>Codec-Specific Data（CSD）</code>，这个在文档中简略的提到过，有两个key，“csd-0”，“csd-1”，这个相当于是一系列元数据的序列参数集合，我们只需要直到这个会在MediaCodec 编码的时候生成，并且在MediaCodec 解码的时候需要它。<br>如果你直接把编码器输出传递给解码器，就会发现第一个包里面有BUFFER_FLAG_CODEC_CONFIG 的flag，这个参数需要确保传递给了解码器，这样解码器才会开始接收数据，或者你可以直接设置CSD数据给MediaFormat，通过 configure() 方法设置给解码器，这里可以参考 EncodeDecodeTest sample 这个例子。<br>实在不行也可以使用 MediaExtractor ，它会帮你做好一切。</p>
+<h3 id="Q4-我可以直接将流数据给解码器么？"><a href="#Q4-我可以直接将流数据给解码器么？" class="headerlink" title="Q4:我可以直接将流数据给解码器么？"></a>Q4:我可以直接将流数据给解码器么？</h3><p>A4.不一定，解码器需要的是 “access units”格式的流，不一定是字节流。对于视频解码器，这意味着你需要保存通过编码器（比如H.264的NAL单元）创建的“包边界”，这里可以参考 DecodeEditEncodeTest sample 是如何操作的，一般不能读任意的块数据并传递给解码器。</p>
+<h3 id="Q5-我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？"><a href="#Q5-我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？" class="headerlink" title="Q5:我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？"></a>Q5:我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？</h3><p>A5.相机输出的颜色格式和MediaCodec 在编码时的输入格式是不一样的，相机支持YV12（平面 YUV 4:2:0） 以及 NV21 （半平面 YUV 4:2:0），MediaCodec支持以下一个或多个：</p>
+<ul>
+<li>#19 COLOR_FormatYUV420Planar (I420)</li>
+<li>#20 COLOR_FormatYUV420PackedPlanar (also I420)</li>
+<li>#21 COLOR_FormatYUV420SemiPlanar (NV12)</li>
+<li>#39 COLOR_FormatYUV420PackedSemiPlanar (also NV12)</li>
+<li>#0x7f000100 COLOR_TI_FormatYUV420PackedSemiPlanar (also also NV12)</li>
+</ul>
+<p>I420的数据布局相当于YV12，但是Cr和Cb却是颠倒的，就像NV12和NV21一样。所以如果你想要去处理相机拿到的YV12数据，可能会看到一些奇怪的颜色干扰，比如<a href="https://stackoverflow.com/questions/13703596/mediacodec-and-camera-colorspaces-dont-match" target="_blank" rel="external">these images</a>。</p>
+<p>直到Android4.4版本，依然没有统一的输入格式，比如像Nvidia Tegra 3设备 Nexus 7（2012），以及Samsung Exynos设备Nexus 10使用的COLOR_FormatYUV420Planar，而Qualcomm Adreno设备像Nexus 4, Nexus 5, and Nexus 7（2013）使用的是COLOR_FormatYUV420SemiPlanar，而TI OMAP设备像Galaxy Nexus使用的COLOR_TI_FormatYUV420PackedSemiPlanar。（这个基于AVC编解码器在第一次被查询时的返回结果）</p>
+<p>一种可移植性更高，更有效率的方式就是使用API 18 的Surface input API，这个在 CameraToMpegTest sample 中已经演示了，这样做的缺点就是你必须去操作RGB而不是YUV数据，这是图像处理软件的问题。如果你可以通过片段着色器来实现图像操作，可能在你的计算前后实现RGB和YUV之间的转换，可以利用这个优势在GPU上执行代码。</p>
+<p>注意，使用以上格式或专有格式，MediaCodeC解码器可能在ByteBuffers上产生数据。例如，基于Qualcomm SoCs的设备通常使用OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m (#2141391876 / 0x7FA30C04)。</p>
+<p>Surface输入使用COLOR_FormatSurface，也被叫做OMX_COLOR_FormatAndroidOpaque (#2130708361 / 0x7F000789)，查看完整列表在 OMX_COLOR_FORMATTYPE <a href="https://android.googlesource.com/platform/frameworks/native/+/kitkat-release/include/media/openmax/OMX_IVCommon.h" target="_blank" rel="external">OMX_IVCommon.h</a>.</p>
+<p>如果是API 21, 你可以用<a href="https://developer.android.com/reference/android/media/Image.html" target="_blank" rel="external">Image</a> 对象代替，查看MediaCodeC的getInputImage()、 getOutputImage()调用。</p>
+<h3 id="Q6-EGL-RECORDABLE-ANDROID-flag是用来干什么的？"><a href="#Q6-EGL-RECORDABLE-ANDROID-flag是用来干什么的？" class="headerlink" title="Q6: EGL_RECORDABLE_ANDROID flag是用来干什么的？"></a>Q6: <code>EGL_RECORDABLE_ANDROID</code> flag是用来干什么的？</h3><p>A6.它会告诉EGL，创建surface的行为必须是视频编解码器能兼容的，没有这个flag，EGL可能使用 MediaCodec 不能理解的格式来操作。</p>
+<h3 id="Q7-ImageReader类可以和MediaCodec一起使用吗"><a href="#Q7-ImageReader类可以和MediaCodec一起使用吗" class="headerlink" title="Q7: ImageReader类可以和MediaCodec一起使用吗?"></a>Q7: <a href="https://developer.android.com/reference/android/media/ImageReader.html" target="_blank" rel="external">ImageReader</a>类可以和MediaCodec一起使用吗?</h3><p>A7. 也许吧。ImageReader类在Android 4.4(API 19)引入,提供了一种方便的方式访问YUV surface中的数据。不幸的是，在API 19中，仅来自Camera的缓冲区中才有效（虽然在API 21中，当MediaCodeC添加getOutputImage()时，可能已经修正）。还有，直到API 23没有对应的ImageWriter类用来创建content。</p>
+<h3 id="Q8-我是不是必须要在编码时设置-presentation-time-stamp-（pts）？"><a href="#Q8-我是不是必须要在编码时设置-presentation-time-stamp-（pts）？" class="headerlink" title="Q8:我是不是必须要在编码时设置 presentation time stamp （pts）？"></a>Q8:我是不是必须要在编码时设置 presentation time stamp （pts）？</h3><p>A7.是的，一些设备如果没有设置合理的值，那么在编码的时候就会采取丢弃帧和低质量编码的方式(see <a href="https://stackoverflow.com/questions/20475332/mediacodec-h264-encoder-not-working-on-snapdragon-800-devices" target="_blank" rel="external">this stackoverflow item</a>)。<br>需要注意的一点就是MediaCodec所需要的time格式是微秒，大部分java代码中的都是毫秒或者纳秒。</p>
+<h3 id="Q9：大部分例子都需要API-18-我在API-16下开发，需要注意什么吗？"><a href="#Q9：大部分例子都需要API-18-我在API-16下开发，需要注意什么吗？" class="headerlink" title="Q9：大部分例子都需要API 18, 我在API 16下开发，需要注意什么吗？"></a>Q9：大部分例子都需要API 18, 我在API 16下开发，需要注意什么吗？</h3><p>A9. 一些关键特性直到API 18都是不可用的，而且一些基本特性在API 16是比较难用的。</p>
+<p>如果你解码视频，也大概是这样。正如你看到的ExtractMpegFramesTest两个实现，新版本的EGL不可用，但对大部分应用程序来说，关系不大。</p>
+<p>如果你要编码视频，事情会更糟，有3个关键点：</p>
+<ul>
+<li>MediaCodeC编码器不接受来自Surface的输入，所以你必须提供数据作为原始的YUV帧。</li>
+<li>YUV帧的布局对于不同的设备是变化的，在一些情况下你必须通过名称检查特定的开发商去处理特定的情况(qirks)。</li>
+<li>一些设备可能没有开放可用的YUV格式支持（例如他们只是内部使用）</li>
+<li>MediaMuxer类不存在，所以没有方法转换H.264流到MediaPlayer可接受的格式（或者其他桌面播放器）。你必须使用第三方的库（比如<a href="https://stackoverflow.com/questions/22996378/android-encoder-muxer-raw-h264-to-mp4-container" target="_blank" rel="external">mp4parser</a>）。</li>
+<li>当MediaMuxer类在API 18被引入后，MediaCodeC编码器的行为变更为在开始时发出 INFO_OUTPUT_FORMAT_CHANGED，所以你可以方便的传递MediaFormat给muxer。 在旧版本中这是不会出现的。</li>
+</ul>
+<p>This <a href="https://stackoverflow.com/questions/21262797/converting-images-to-video" target="_blank" rel="external">stackoverflow item</a> has additional links and commentary.</p>
+<p>用于MediaCodeC的CTS测试从API 18(Android 4.3)被引入。这意味着首次release后，这些基本特性在不同的设备上表现可能是一致的。特别需要说明的是，4.3以前的设备有已知的在解码中丢最后一帧或抢夺PTS的问题。 </p>
+<h3 id="Q10：在AOSP-emulator中能使用MediaCodeC吗"><a href="#Q10：在AOSP-emulator中能使用MediaCodeC吗" class="headerlink" title="Q10：在AOSP emulator中能使用MediaCodeC吗?"></a>Q10：在AOSP emulator中能使用MediaCodeC吗?</h3><p>A10. 也许吧。模拟器提供了一种缺少一定特性的软AVC编解码器, 尤其是缺少从Surface作为输入（虽然在Android 5.0 “Lollipop”中可能已被修复）。但在物理设备上开发可能会更好。</p>
+<h3 id="Q11-为什么有时输出混乱（比如都是零，或者太短等等）？"><a href="#Q11-为什么有时输出混乱（比如都是零，或者太短等等）？" class="headerlink" title="Q11:为什么有时输出混乱（比如都是零，或者太短等等）？"></a>Q11:为什么有时输出混乱（比如都是零，或者太短等等）？</h3><p>A8.这常见的错误就是没有去适配ByteBuffer的position和limit，这些事情MediaCodec并没有自动的去做，<br>我们需要手动的加上一些代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">int bufIndex = codec.dequeueOutputBuffer(info, TIMEOUT);</div><div class="line">ByteBuffer outputData = outputBuffers[bufIndex];</div><div class="line">if (info.size != 0) &#123;</div><div class="line">    outputData.position(info.offset);</div><div class="line">    outputData.limit(info.offset + info.size);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在输入端，你需要在将数据复制到缓冲区之前调用 clear() 。</p>
+<h3 id="Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？"><a href="#Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？" class="headerlink" title="Q12: 有时候在Log中会发现 storeMetaDataInBuffers 的错误？"></a>Q12: 有时候在Log中会发现 <code>storeMetaDataInBuffers</code> 的错误？</h3><p>A9.比如在Nexus 5上，看起来是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">E OMXNodeInstance: OMX_SetParameter() failed for StoreMetaDataInBuffers: 0x8000101a</div><div class="line">E ACodec  : [OMX.qcom.video.encoder.avc] storeMetaDataInBuffers (output) failed w/ err -2147483648</div></pre></td></tr></table></figure></p>
+<p>可以忽略这些，不会出现什么问题。</p>
+<p>作者：Zach<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MediaCodeC/" rel="tag"># MediaCodeC</a>
+          
+            <a href="/tags/Translation/" rel="tag"># Translation</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/22/简单选择排序-Simple-Selection-Sort/" rel="next" title="简单选择排序(Simple Selection Sort)">
+                <i class="fa fa-chevron-left"></i> 简单选择排序(Simple Selection Sort)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Zach Liu" />
+          <p class="site-author-name" itemprop="name">Zach Liu</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">2.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">3.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">4.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q1-我怎么播放一个由MediaCodec创建的“video-avc”格式的视频流？"><span class="nav-number">4.1.</span> <span class="nav-text">Q1:我怎么播放一个由MediaCodec创建的“video/avc”格式的视频流？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？"><span class="nav-number">4.2.</span> <span class="nav-text">Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q3-我的视频解码器配置好了但是不接收数据，这是为什么？"><span class="nav-number">4.3.</span> <span class="nav-text">Q3:我的视频解码器配置好了但是不接收数据，这是为什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q4-我可以直接将流数据给解码器么？"><span class="nav-number">4.4.</span> <span class="nav-text">Q4:我可以直接将流数据给解码器么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q5-我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？"><span class="nav-number">4.5.</span> <span class="nav-text">Q5:我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q6-EGL-RECORDABLE-ANDROID-flag是用来干什么的？"><span class="nav-number">4.6.</span> <span class="nav-text">Q6: EGL_RECORDABLE_ANDROID flag是用来干什么的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q7-ImageReader类可以和MediaCodec一起使用吗"><span class="nav-number">4.7.</span> <span class="nav-text">Q7: ImageReader类可以和MediaCodec一起使用吗?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q8-我是不是必须要在编码时设置-presentation-time-stamp-（pts）？"><span class="nav-number">4.8.</span> <span class="nav-text">Q8:我是不是必须要在编码时设置 presentation time stamp （pts）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q9：大部分例子都需要API-18-我在API-16下开发，需要注意什么吗？"><span class="nav-number">4.9.</span> <span class="nav-text">Q9：大部分例子都需要API 18, 我在API 16下开发，需要注意什么吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q10：在AOSP-emulator中能使用MediaCodeC吗"><span class="nav-number">4.10.</span> <span class="nav-text">Q10：在AOSP emulator中能使用MediaCodeC吗?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q11-为什么有时输出混乱（比如都是零，或者太短等等）？"><span class="nav-number">4.11.</span> <span class="nav-text">Q11:为什么有时输出混乱（比如都是零，或者太短等等）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？"><span class="nav-number">4.12.</span> <span class="nav-text">Q12: 有时候在Log中会发现 storeMetaDataInBuffers 的错误？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zach Liu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.1.1"></script>
+
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "702f8356a3374ae2af21febb25c4c384",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
