@@ -97,7 +97,7 @@
 <meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
 <meta property="og:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
-<meta property="og:updated_time" content="2017-09-19T11:01:29.000Z">
+<meta property="og:updated_time" content="2017-09-19T11:10:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android MediaCodeC stuff">
 <meta name="twitter:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
@@ -354,9 +354,17 @@
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>所有的同步模式的 MediaCodec API都遵循一个模式：</p>
 <ul>
 <li>创建并配置一个 MediaCodec 对象</li>
-<li>循环直到完成；</li>
-<li>如果输入缓冲区就绪，读取一个输入块，并复制到输入缓冲区中</li>
-<li>如果输出缓冲区就绪，复制输出缓冲区的数据</li>
+<li>loop util done:<ul>
+<li>if input buffer is ready<ul>
+<li>读取一个输入块，并复制到缓冲区中</li>
+</ul>
+</li>
+<li>if output buffer is ready<ul>
+<li>从缓冲区中拷贝数据</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>释放 MediaCodec 对象</li>
 </ul>
 <p>MediaCodec的一个实例会处理一种类型的数据，（比如，MP3音频或H.264视频），编码或是解码。它对原始数据操作，所有任何的文件头，比如ID3（一般是位于一个mp3文件的开头或末尾的若干字节内，附加了关于该mp3的歌手，标题，专辑名称，年代，风格等信息，该信息就被称为ID3信息）这些信息会被擦除。它不与任何高级的系统组件通信，也不会通过扬声器来播放音频，或是通过网络来获取视频流数据，它只是一个会从缓冲区取数据，并返回数据的中间层。<br>一些编解码器对于它们的缓冲区是比较特殊的，它们可能需要一些特殊的内存对齐或是有特定的最小最大限制，为了适应广泛的可能性，buffer缓冲区分配是由编解码器自己实现的，而不是应用程序的层面。你并不需要一个带有数据的缓冲区给 MediaCodec，而是直接向它申请一个缓冲区，然后把你的数据拷贝进去。<br>这看起来和“零拷贝”原则是相悖的，但大部分情况发生拷贝的几率是比较小的，因为编解码器并不需要复制或调整这些数据来满足要求，而且大多数我们可以直接使用缓冲区，比如直接从磁盘或网络读取数据到缓冲区中，不需要复制。<br>MediaCodec的输入必须在“access units”中完成，在编码H.264视频时意味着一帧，在解码时意味着是一个NAL单元，然而，它看起来感觉更像是流，你不能提交一个单块，并期望不久后就出现，实际上，编解码器可能会在输出前入队好几个buffers。<br>这里强烈建议直接从下面的示例代码中学习，而不是直接从官方文档上手。</p>
