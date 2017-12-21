@@ -97,7 +97,7 @@
 <meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
 <meta property="og:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
-<meta property="og:updated_time" content="2017-09-19T11:10:26.000Z">
+<meta property="og:updated_time" content="2017-09-28T11:38:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android MediaCodeC stuff">
 <meta name="twitter:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
@@ -373,9 +373,9 @@
 <li>生成解码流</li>
 <li>测试解码流是否和原始数据一样</li>
 </ul>
-<p>上面的生成，编码，解码，检测基本是同时的，帧被生成后，传递给编码器，编码器拿到的数据会传递给解码器，然后进行校验，三种方式分别是<br>1、Buffer到Buffer，buffers是软件生成的YUV帧数据，这种方式是最慢的，但是能够允许应用程序去检测和修改YUV数据。<br>2、Buffer到Surface，编码是一样的，但是解码会在surface中，通过OpenGL ES的 <code>getReadPixels()</code>进行校验<br>3、Surface到Surface，通过OpenGL ES生成帧并解码到Surface中，这是最快的方式，但是需要YUV和RGB数据的转换。</p>
+<p>上面的生成，编码，解码，检测基本是同时的，帧被生成后，传递给编码器，编码器拿到的数据会传递给解码器，然后进行校验，三种方式分别是<br>1、Buffer-to-Buffer，buffers是软件生成的YUV帧数据，这种方式是最慢的，但是能够允许应用程序去检测和修改YUV数据。<br>2、Buffer-to-Surface，编码是一样的，但是解码会在surface中，通过OpenGL ES的 <code>getReadPixels()</code>进行校验<br>3、Surface-to-Surface，通过OpenGL ES生成帧并解码到Surface中，这是最快的方式，但是需要YUV和RGB数据的转换。</p>
 <p>以上测试运行在3种不同的分辨率：720p(1280x720),QCIF(176x144),and QVGA(320X240)</p>
-<p>缓冲区到缓冲区以及缓冲区到Surface的测试可在Android 4.1（API 16）构建。 因为CTS在Android 4.3以前是不存在的，一些设备被移植到不完整的实现中。</p>
+<p>buffer-to-buffer以及buffer-to-Surface的测试可在Android 4.1（API 16）构建。 因为CTS在Android 4.3以前是不存在的，一些设备被移植到不完整的实现中。</p>
 <p><em>注意：setByteBuffer() 的使用可能不是严格正确的，它没有设置“csd-1”。</em></p>
 <p>（作为一个Android 5.x使用异步API的例子，可查看mstorsjo的项目 <a href="https://github.com/mstorsjo/android-decodeencodetest" target="_blank" rel="external">android-decodeencodetest</a>）</p>
 <p><strong><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/DecodeEditEncodeTest.java" target="_blank" rel="external">DecodeEditEncodeTest.java</a> (requires 4.3, API 18)</strong><br>CTS test:</p>
@@ -386,7 +386,7 @@
 <li>使用MediaCodeC进行帧编码，使用一个输入Surface</li>
 <li>解码编辑后的视频流，验证输出。</li>
 </ul>
-<p>这中间 解码-编辑-编码 的过程展示了编解码的过程是几乎同步的， 帧数据直接从解码器到编码器，视频数据保存在内存中，初始化生成和最终的验证是分开传递的。</p>
+<p>这中间 decode-edit-encode 的过程展示了编解码的过程是几乎同步的， 帧数据直接从解码器到编码器，视频数据保存在内存中，初始化生成和最终的验证是分开传递的。</p>
 <p>以上测试运行在3种不同的分辨率：720p(1280x720),QCIF(176x144),and QVGA(320X240)</p>
 <p>没有软解释（software-interpreted）的YUV缓冲区被使用，一切都通过Surface实现。在特定点会有RGB和YUV之间的转换，有多少以及在哪转换取决于驱动是如何实现的。</p>
 <p><strong>注意：对于这个以及其他CTS测试，你可以通过编辑相关类的URL来查看其他的类。例如要查看InputSurface和OutputSurface, 可从URL中移除“DecodeEditEncodeTest.java”， 进入这个<a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/" target="_blank" rel="external">链接</a>。</strong></p>
@@ -408,7 +408,7 @@
 <p><strong><a href="http://www.bigflake.com/screenrecord/" target="_blank" rel="external">screenrecord</a> (uses non-public native APIs)</strong><br>你可以访问screenrecord的源码，开发者shell command被引入<strong>Android 4.4(API 19)</strong>。它说明了MediaCodeC在native中的等价使用方法以及MediaMuxer在纯native命令行中的使用。v1.1 使用了GLES以及native中SurfaceTexture的等价方法。<br>这个只是用来作为参考。非共有API方法在release版本中可能不生效，并无法保证在不同设备间的行为一致性。</p>
 <p><strong><a href="https://github.com/google/grafika" target="_blank" rel="external">Grafika</a> (requires 4.3, API 18)</strong><br>测试各种不同的图形以及多媒体特征的应用。例子包含了录制以及显示camera preview, 录制 OpenGL ES rendering, 同步解码多个视频，以及SurfaceView, GLSurfaceView, TextureView的使用。极不稳定，用来愉快的玩耍吧。不像这里的大部分例子，Grafika是一个完整的应用，所以你可以用它来更容易的做一些尝试。EGL/GLES代码也被重定义，可以更方便的包含在其他工程中。</p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="Q1-我怎么播放一个由MediaCodec创建的“video-avc”格式的视频流？"><a href="#Q1-我怎么播放一个由MediaCodec创建的“video-avc”格式的视频流？" class="headerlink" title="Q1:我怎么播放一个由MediaCodec创建的“video/avc”格式的视频流？"></a>Q1:我怎么播放一个由MediaCodec创建的“video/avc”格式的视频流？</h3><p>A1.这个被创建的流是原始的H.264流数据，Linux的Totem Movie Player可以播放，但大部分其他的都播放不了，你可以使用 MediaMuxer 将其转换为MP4文件，看前面的EncodeAndMuxTest例子。</p>
-<h3 id="Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？"><a href="#Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？" class="headerlink" title="Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？"></a>Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？</h3><p>A2.这通常是因为你没有指定所有编码器需要的关键命令，可以看一个这个例子 this stackoverflow item。</p>
+<h3 id="Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？"><a href="#Q2-当我创建一个编码器时，调用-MediaCodec的configure-方法会失败并抛出一个IllegalStateException异常？" class="headerlink" title="Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？"></a>Q2:当我创建一个编码器时，调用 MediaCodec的configure()方法会失败并抛出一个IllegalStateException异常？</h3><p>A2.这通常是因为你没有指定所有编码器需要的关键命令，可以看一个这个例子 <a href="https://stackoverflow.com/questions/17233835/illegalstateexception-when-mediacodec-configure-android/17243175#17243175" target="_blank" rel="external">this stackoverflow item</a>。</p>
 <h3 id="Q3-我的视频解码器配置好了但是不接收数据，这是为什么？"><a href="#Q3-我的视频解码器配置好了但是不接收数据，这是为什么？" class="headerlink" title="Q3:我的视频解码器配置好了但是不接收数据，这是为什么？"></a>Q3:我的视频解码器配置好了但是不接收数据，这是为什么？</h3><p>A3.一个比较常见的错误就是忽略设置<code>Codec-Specific Data（CSD）</code>，这个在文档中简略的提到过，有两个key，“csd-0”，“csd-1”，这个相当于是一系列元数据的序列参数集合，我们只需要直到这个会在MediaCodec 编码的时候生成，并且在MediaCodec 解码的时候需要它。<br>如果你直接把编码器输出传递给解码器，就会发现第一个包里面有BUFFER_FLAG_CODEC_CONFIG 的flag，这个参数需要确保传递给了解码器，这样解码器才会开始接收数据，或者你可以直接设置CSD数据给MediaFormat，通过 configure() 方法设置给解码器，这里可以参考 EncodeDecodeTest sample 这个例子。<br>实在不行也可以使用 MediaExtractor ，它会帮你做好一切。</p>
 <h3 id="Q4-我可以直接将流数据给解码器么？"><a href="#Q4-我可以直接将流数据给解码器么？" class="headerlink" title="Q4:我可以直接将流数据给解码器么？"></a>Q4:我可以直接将流数据给解码器么？</h3><p>A4.不一定，解码器需要的是 “access units”格式的流，不一定是字节流。对于视频解码器，这意味着你需要保存通过编码器（比如H.264的NAL单元）创建的“包边界”，这里可以参考 DecodeEditEncodeTest sample 是如何操作的，一般不能读任意的块数据并传递给解码器。</p>
 <h3 id="Q5-我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？"><a href="#Q5-我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？" class="headerlink" title="Q5:我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？"></a>Q5:我在编码由相机预览拿到的YUV数据时，为什么看起来颜色有问题？</h3><p>A5.相机输出的颜色格式和MediaCodec 在编码时的输入格式是不一样的，相机支持YV12（平面 YUV 4:2:0） 以及 NV21 （半平面 YUV 4:2:0），MediaCodec支持以下一个或多个：</p>
@@ -445,8 +445,9 @@
 <p>在输入端，你需要在将数据复制到缓冲区之前调用 clear() 。</p>
 <h3 id="Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？"><a href="#Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？" class="headerlink" title="Q12: 有时候在Log中会发现 storeMetaDataInBuffers 的错误？"></a>Q12: 有时候在Log中会发现 <code>storeMetaDataInBuffers</code> 的错误？</h3><p>A9.比如在Nexus 5上，看起来是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">E OMXNodeInstance: OMX_SetParameter() failed for StoreMetaDataInBuffers: 0x8000101a</div><div class="line">E ACodec  : [OMX.qcom.video.encoder.avc] storeMetaDataInBuffers (output) failed w/ err -2147483648</div></pre></td></tr></table></figure></p>
 <p>可以忽略这些，不会出现什么问题。</p>
-<p>参考自：<a href="http://www.jianshu.com/p/e6c683d6dbbe" target="_blank" rel="external">Android MediaCodec编解码详解及demo</a>， 并有补充与完善。</p>
-<p>英文地址： <a href="http://bigflake.com/mediacodec/" target="_blank" rel="external">Android MediaCodeC stuff</a></p>
+<blockquote>
+<p>参考自：<a href="http://www.jianshu.com/p/e6c683d6dbbe" target="_blank" rel="external">Android MediaCodec编解码详解及demo</a>， 并有补充与完善。<br>英文地址： <a href="http://bigflake.com/mediacodec/" target="_blank" rel="external">Android MediaCodeC stuff</a></p>
+</blockquote>
 <p>作者：Zach<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 
       

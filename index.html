@@ -479,7 +479,9 @@
       
         
           
-            <p>锁屏开启一像素的方法。经试验，按back键打开保活界面后，屏幕无法点击；HOME键打开保活界面会在最近任务列表产生一个空页面，不可行。参考方案：<br><a href="http://blog.csdn.net/andrexpert/article/details/75045678" target="_blank" rel="external">http://blog.csdn.net/andrexpert/article/details/75045678</a></p>
+            <p>Low Memory Killer原理：<br><a href="http://www.cnblogs.com/angeldevil/archive/2013/05/21/3090872.html" target="_blank" rel="external">http://www.cnblogs.com/angeldevil/archive/2013/05/21/3090872.html</a></p>
+<p>1、利用系统广播/开机唤醒<br>2、第三方SDK唤醒<br>3、多个APP互相拉起，即大家熟知的全家桶方式，可使用LBE路径唤醒功能分析目前的应用</p>
+<p>锁屏开启一像素的方法。经试验，按back键打开保活界面后，屏幕无法点击；HOME键打开保活界面会在最近任务列表产生一个空页面，不可行。参考方案：<br><a href="http://blog.csdn.net/andrexpert/article/details/75045678" target="_blank" rel="external">http://blog.csdn.net/andrexpert/article/details/75045678</a></p>
 <p>这个方案总体来说还是可行的， 只是在开屏状态下，app的优先级还是默认的，无法控制。而且有一个比较麻烦的问题，按HOME键锁屏之后，要大概2-3s才能启动保活界面，这就导致如果在这几秒内开屏，保活页面还没来得及启动，等开屏之后才启动就无法成功销毁。有个很关键的地方是这个界面的启动模式要为singleInstance, 否则开屏后会把应用吊起，很容易被用户感知。</p>
 <p>可能需要用到判断前后台：<br><a href="http://www.jianshu.com/p/c894492d79b9?open_source=weibo_search" target="_blank" rel="external">http://www.jianshu.com/p/c894492d79b9?open_source=weibo_search</a></p>
 <p>1像素 oom_adj  nexus 5x 7.1.1<br>前台 0 后台 12<br>点击最近任务 12<br>锁屏启动OnePixelActivity后 0<br>锁屏-&gt;开屏后 16</p>
