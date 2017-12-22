@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://oqi78nyfk.bkt.clouddn.com/Screen%20Shot%202017-09-28%20at%2011.08.30.png">
 <meta property="og:image" content="http://oqi78nyfk.bkt.clouddn.com/Screen%20Shot%202017-09-28%20at%2011.08.40.png">
 <meta property="og:image" content="http://oqi78nyfk.bkt.clouddn.com/Screen%20Shot%202017-09-28%20at%2011.09.02.png">
-<meta property="og:updated_time" content="2017-12-21T07:23:05.000Z">
+<meta property="og:updated_time" content="2017-12-22T02:07:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MediaCodeC document">
 <meta name="twitter:description" content="简介MediaCodec类可以获取底层媒体编码/解码库，是Android底层多媒体支持库的一部分（一般和MediaExtractor(api 16)、MediaSync(api 23)、MediaMuxer(api 18)、MediaCrypto(api 16)、MediaDrm(api 18)、Image(api 19)、Surface(api 1)、AudioTrack(api 3)搭配使用）">
@@ -425,7 +425,7 @@
 <h3 id="使用输入Surface"><a href="#使用输入Surface" class="headerlink" title="使用输入Surface"></a>使用输入Surface</h3><p>当使用输入Surface时，没有可访问的输入buffer，这是因为buffer自动的从输入Surface传到codec，调用dequeueInputBuffer将会抛出IllegalStateException异常，getInputBuffers() 返回的是一个不可写的伪ByteBuffer[]。<br>调用 signalEndOfInputStream() 传递 end-of-stream标志后，输入Surface就会停止向codec提交数据。</p>
 <h2 id="seeking和自适应播放支持"><a href="#seeking和自适应播放支持" class="headerlink" title="seeking和自适应播放支持"></a>seeking和自适应播放支持</h2><p>无论是否支持并配置为自适应播放，视频解码器（以及一些压缩数据的编码器）在seek和格式更改的行为都不同。可以通过CodecCapatilities.isFeatureSupported(String)检查解码器是否支持自适应播放。视频解码器的自适应播放只有在将codec配置到Surface上时，才会被激活。</p>
 <h3 id="流边界和关键帧"><a href="#流边界和关键帧" class="headerlink" title="流边界和关键帧"></a>流边界和关键帧</h3><p>重要的是，在start()或者flush()后输入数据要在合适的流边界开始：第一帧必须是关键帧。<br>关键帧可以通过自身被完全解码（大多数codec的I帧），并且关键帧之后没有帧要显示指的是关键帧之前的帧。<br>下表对不同视频格式合适的关键帧进行了总结：<br><img src="http://oqi78nyfk.bkt.clouddn.com/Screen%20Shot%202017-09-28%20at%2011.09.02.png" alt=""></p>
-<h3 id="不支持自适应播放的解码器（包括不解码到Surface）"><a href="#不支持自适应播放的解码器（包括不解码到Surface）" class="headerlink" title="不支持自适应播放的解码器（包括不解码到Surface）"></a>不支持自适应播放的解码器（包括不解码到Surface）</h3><p>为了开始解码与之前提交数据不相邻的数据，必须flush解码器。由于所有的输出buffer在flush时被立即撤销，所以需要首先发送信号，等到end-of-stream标志时在flush。重要的是，刷新后的输入数据在合适的流边界/关键帧开始。</p>
+<h3 id="不支持自适应播放的解码器（包括不解码到Surface）"><a href="#不支持自适应播放的解码器（包括不解码到Surface）" class="headerlink" title="不支持自适应播放的解码器（包括不解码到Surface）"></a>不支持自适应播放的解码器（包括不解码到Surface）</h3><p>为了开始解码与之前提交数据不相邻的数据，必须flush解码器。由于所有的输出buffer在flush时被立即撤销，所以需要首先发送信号，等到end-of-stream标志时再flush。重要的是，刷新后的输入数据在合适的流边界/关键帧开始。</p>
 <blockquote>
 <p>注意，提交数据的格式在flush后必须不能更改，flush() 不支持不连续的格式。对于这种情况，一个完整的stop() - configure(…) - start() 的循环的必要的。<br>同时注意，如果你在start()后flush codec太频繁 - 一般来说，在首次output buffer或output format变更被接收到时 - 你需要重新提交codec-specific-data到codec。可以查看上面关于 codec-specific-data 一块的介绍。</p>
 </blockquote>
@@ -438,7 +438,7 @@
 <ul>
 <li>recoverable errors（可恢复的错误）：如果isRecoverable（）返回true，则调用stop（），configure（…）和start（）来恢复。</li>
 <li>transient errors（瞬时错误）:如果isTransient（）返回true，则资源暂时不可用，并且可能会在稍后重试该方法。</li>
-<li>fatal errors（致命错误）：如果bothRecoverable（）和isTransient（）都返回false，则CodecException是致命的，codec必须rest或released。<br>isRecoverable（）和isTransient（）不会同时返回true</li>
+<li>fatal errors（致命错误）：如果isRecoverable（）和isTransient（）都返回false，则CodecException是致命的，codec必须reset或released。<br>isRecoverable（）和isTransient（）不会同时返回true</li>
 </ul>
 
       
