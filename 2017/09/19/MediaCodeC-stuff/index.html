@@ -93,13 +93,13 @@
 <meta name="description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
 <meta name="keywords" content="MediaCodeC,Translation">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android MediaCodeC stuff">
-<meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/index.html">
+<meta property="og:title" content="MediaCodeC stuff">
+<meta property="og:url" content="https://spiritedrunning.github.io/2017/09/19/MediaCodeC-stuff/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
 <meta property="og:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
-<meta property="og:updated_time" content="2017-09-28T11:38:16.000Z">
+<meta property="og:updated_time" content="2019-07-27T08:59:06.065Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android MediaCodeC stuff">
+<meta name="twitter:title" content="MediaCodeC stuff">
 <meta name="twitter:description" content="这篇文章是关于 MediaCodec 相关类的介绍，它主要是用来编码和解码音视频数据。并且包含了一些源码示例以及常见问题的解答。在API 23之后，官方文档 official 就已经十分的详细了。这里的一些信息可以帮你了解一些编解码方面的知识，为了考虑兼容性，这里的代码大部分都是运行在API 18及以上的环境中，当然如果你的目标是Lollipop 以上的用户，你可以有更多的选择，这些都没有在这里提">
 
 
@@ -128,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/"/>
+  <link rel="canonical" href="https://spiritedrunning.github.io/2017/09/19/MediaCodeC-stuff/"/>
 
 
 
 
 
-  <title>Android MediaCodeC stuff | Zach's Blog</title>
+  <title>MediaCodeC stuff | Zach's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -274,7 +274,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://spiritedrunning.github.io/2017/09/19/Android-MediaCodeC-stuff/">
+    <link itemprop="mainEntityOfPage" href="https://spiritedrunning.github.io/2017/09/19/MediaCodeC-stuff/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zach Liu">
@@ -291,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android MediaCodeC stuff</h1>
+          <h1 class="post-title" itemprop="name headline">MediaCodeC stuff</h1>
         
 
         <div class="post-meta">
@@ -313,6 +313,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -441,7 +463,7 @@
 <p>This <a href="https://stackoverflow.com/questions/21262797/converting-images-to-video" target="_blank" rel="external">stackoverflow item</a> has additional links and commentary.</p>
 <p>用于MediaCodeC的CTS测试从API 18(Android 4.3)被引入。这意味着首次release后，这些基本特性在不同的设备上表现可能是一致的。特别需要说明的是，4.3以前的设备有已知的在解码中丢最后一帧或抢夺PTS的问题。 </p>
 <h3 id="Q10：在AOSP-emulator中能使用MediaCodeC吗"><a href="#Q10：在AOSP-emulator中能使用MediaCodeC吗" class="headerlink" title="Q10：在AOSP emulator中能使用MediaCodeC吗?"></a>Q10：在AOSP emulator中能使用MediaCodeC吗?</h3><p>A10. 也许吧。模拟器提供了一种缺少一定特性的软AVC编解码器, 尤其是缺少从Surface作为输入（虽然在Android 5.0 “Lollipop”中可能已被修复）。但在物理设备上开发可能会更好。</p>
-<h3 id="Q11-为什么有时输出混乱（比如都是零，或者太短等等）？"><a href="#Q11-为什么有时输出混乱（比如都是零，或者太短等等）？" class="headerlink" title="Q11:为什么有时输出混乱（比如都是零，或者太短等等）？"></a>Q11:为什么有时输出混乱（比如都是零，或者太短等等）？</h3><p>A8.这常见的错误就是没有去适配ByteBuffer的position和limit，这些事情MediaCodec并没有自动的去做，<br>我们需要手动的加上一些代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">int bufIndex = codec.dequeueOutputBuffer(info, TIMEOUT);</div><div class="line">ByteBuffer outputData = outputBuffers[bufIndex];</div><div class="line">if (info.size != 0) &#123;</div><div class="line">    outputData.position(info.offset);</div><div class="line">    outputData.limit(info.offset + info.size);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Q11-为什么有时输出混乱（比如都是零，或者太短等等）？"><a href="#Q11-为什么有时输出混乱（比如都是零，或者太短等等）？" class="headerlink" title="Q11:为什么有时输出混乱（比如都是零，或者太短等等）？"></a>Q11:为什么有时输出混乱（比如都是零，或者太短等等）？</h3><p>A8.这常见的错误就是没有去适配ByteBuffer的position和limit，这些事情MediaCodec并没有自动的去做，<br>我们需要手动的加上一些代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> bufIndex = codec.dequeueOutputBuffer(info, TIMEOUT);</div><div class="line">ByteBuffer outputData = outputBuffers[bufIndex];</div><div class="line"><span class="keyword">if</span> (info.size != <span class="number">0</span>) &#123;</div><div class="line">    outputData.position(info.offset);</div><div class="line">    outputData.limit(info.offset + info.size);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>在输入端，你需要在将数据复制到缓冲区之前调用 clear() 。</p>
 <h3 id="Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？"><a href="#Q12-有时候在Log中会发现-storeMetaDataInBuffers-的错误？" class="headerlink" title="Q12: 有时候在Log中会发现 storeMetaDataInBuffers 的错误？"></a>Q12: 有时候在Log中会发现 <code>storeMetaDataInBuffers</code> 的错误？</h3><p>A9.比如在Nexus 5上，看起来是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">E OMXNodeInstance: OMX_SetParameter() failed for StoreMetaDataInBuffers: 0x8000101a</div><div class="line">E ACodec  : [OMX.qcom.video.encoder.avc] storeMetaDataInBuffers (output) failed w/ err -2147483648</div></pre></td></tr></table></figure></p>
 <p>可以忽略这些，不会出现什么问题。</p>
@@ -493,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/01/android 7.0 通知报错/" rel="next" title="android 7.0 java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-                <i class="fa fa-chevron-left"></i> android 7.0 java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group
+              <a href="/2017/03/01/android 7.0 通知系统发送失败/" rel="next" title="android 7.0 通知系统发送失败">
+                <i class="fa fa-chevron-left"></i> android 7.0 通知系统发送失败
               </a>
             
           </div>
@@ -503,8 +525,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/21/Android-进程保活持续研究/" rel="prev" title="Android 进程保活研究">
-                Android 进程保活研究 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/28/MediaCodeC API 文档/" rel="prev" title="MediaCodeC API文档">
+                MediaCodeC API文档 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -580,7 +602,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -591,7 +613,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -602,7 +624,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
