@@ -68,7 +68,7 @@
 <meta property="og:image" content="https://i.postimg.cc/sfPWXG3x/Screenshot-2019-11-01-at-13-18-38.png">
 <meta property="og:image" content="https://i.postimg.cc/28P0DBG6/Screenshot-2019-11-01-at-13-08-14.png">
 <meta property="og:image" content="https://i.loli.net/2019/11/01/e2QbEPImnKUDGXF.png">
-<meta property="og:updated_time" content="2019-11-01T10:44:58.406Z">
+<meta property="og:updated_time" content="2019-11-01T10:48:52.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebSocket 简介">
 <meta name="twitter:description" content="最近工作中用到了Websocket, 之前没有怎么接触过， 特此来记录一下。 简单的说，WebSocket是HTTP上的Socket通信规范，提供与“TCP Socket”类似的功能，使用它就可以像“TCP Socket”一样调用下层协议栈，任意地收发数据。更准确地说，“WebSocket”是一种基于 TCP 的轻量级网络通信协议，在地位上是与 HTTP“平级”的。 为什么要有WebSocket其">
@@ -264,7 +264,7 @@
                 
               
 
-              <time title="创建时间：2019-11-01 00:00:00 / 修改时间：18:44:58" itemprop="dateCreated datePublished" datetime="2019-11-01T00:00:00+08:00">2019-11-01</time>
+              <time title="创建时间：2019-11-01 00:00:00 / 修改时间：18:48:52" itemprop="dateCreated datePublished" datetime="2019-11-01T00:00:00+08:00">2019-11-01</time>
             </span>
           
             
@@ -307,7 +307,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">3.4k</span>
+              <span title="本文字数">3.5k</span>
             </span>
           
             <span class="post-meta-item">
@@ -333,6 +333,7 @@
         <p>最近工作中用到了Websocket, 之前没有怎么接触过， 特此来记录一下。</p>
 <p>简单的说，WebSocket是HTTP上的Socket通信规范，提供与“TCP Socket”类似的功能，使用它就可以像“TCP Socket”一样调用下层协议栈，任意地收发数据。更准确地说，“WebSocket”是一种基于 TCP 的轻量级网络通信协议，在地位上是与 HTTP“平级”的。</p>
 <h2 id="为什么要有WebSocket"><a href="#为什么要有WebSocket" class="headerlink" title="为什么要有WebSocket"></a>为什么要有WebSocket</h2><p>其实 WebSocket 与 HTTP/2 一样，都是为了解决 HTTP 某方面的缺陷而诞生的。HTTP/2 针对的是“队头阻塞”，更侧重于提高传输效率；而 WebSocket 针对的是“请求 - 应答”通信模式，更侧重于“<strong>实时通信</strong>”。</p>
+<p>WebSocket 和 HTTP/2 都是用来弥补HTTP协议的一些缺陷和不足，WebSocket 主要解决双向通信、全双工问题，HTTP/2 主要解决传输效率的问题，两者在二进制帧的格式上也不太一样，HTTP/2 有多路复用、优先级和流的概念。</p>
 <p>“请求 - 应答”是一种“半双工”的通信模式，虽然可以双向收发数据，但同一时刻只能一个方向上有动作，传输效率低。更关键的一点，它是一种“被动”通信模式，服务器只能“被动”响应客户端的请求，无法主动向客户端发送数据。虽然后来的 HTTP/2、HTTP/3 新增了 Stream、Server Push 等特性，但“请求 - 应答”依然是主要的工作方式。这就导致 HTTP 难以应用在动态页面、即时消息、网络游戏等要求“实时通信”的领域。</p>
 <p>在 WebSocket 出现之前，在浏览器环境里用 JavaScript 开发实时 Web 应用很麻烦。因为浏览器是一个“受限的沙盒”，不能用 TCP，只有 HTTP 协议可用，所以就出现了很多“变通”的技术，“轮询”（polling）就是比较常用的的一种。</p>
 <p>简单地说，轮询就是不停地向服务器发送 HTTP 请求，问有没有数据，有数据的话服务器就用响应报文回应。如果轮询的频率比较高，那么就可以近似地实现“实时通信”的效果。但轮询的缺点也很明显，反复发送无效查询请求耗费了大量的带宽和 CPU 资源，非常不经济。</p>

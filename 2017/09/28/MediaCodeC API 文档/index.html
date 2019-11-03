@@ -71,9 +71,9 @@
 <meta property="og:image" content="https://i.postimg.cc/wxNzDcDQ/Screenshot-2019-07-27-at-16-08-39.png">
 <meta property="og:image" content="https://i.postimg.cc/wMgwyphP/Screenshot-2019-07-27-at-16-08-48.png">
 <meta property="og:image" content="https://i.postimg.cc/TwCD0MzB/Screenshot-2019-07-27-at-16-09-07.png">
-<meta property="og:image" content="https://i.postimg.cc/ZRB1J4Th/Screenshot-2019-07-27-at-16-20-36.png">
-<meta property="og:image" content="https://i.postimg.cc/6QSmjgCb/Screenshot-2019-07-27-at-16-24-02.png">
-<meta property="og:updated_time" content="2019-07-27T13:52:18.039Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/03/fHd6wam92eNXPTY.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/03/jKzrn3V4IHCxFef.png">
+<meta property="og:updated_time" content="2019-11-03T01:23:17.527Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MediaCodeC API文档">
 <meta name="twitter:description" content="原文地址 简介MediaCodec类可以获取底层媒体编码/解码库，是Android底层多媒体支持库的一部分（一般和MediaExtractor(api 16)、MediaSync(api 23)、MediaMuxer(api 18)、MediaCrypto(api 16)、MediaDrm(api 18)、Image(api 19)、Surface(api 1)、AudioTrack(api 3)">
@@ -282,7 +282,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-27 21:52:18" itemprop="dateModified" datetime="2019-07-27T21:52:18+08:00">2019-07-27</time>
+                <time title="修改时间：2019-11-03 09:23:17" itemprop="dateModified" datetime="2019-11-03T09:23:17+08:00">2019-11-03</time>
               </span>
             
           
@@ -362,7 +362,7 @@
       
         <p><a href="https://developer.android.com/reference/android/media/MediaCodec" target="_blank" rel="external">原文地址</a></p>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>MediaCodec类可以获取底层媒体编码/解码库，是Android底层多媒体支持库的一部分（一般和<a href="https://developer.android.com/reference/android/media/MediaExtractor.html" target="_blank" rel="external">MediaExtractor</a>(api 16)、<a href="https://developer.android.com/reference/android/media/MediaSync.html" target="_blank" rel="external">MediaSync</a>(api 23)、<a href="https://developer.android.com/reference/android/media/MediaMuxer.html" target="_blank" rel="external">MediaMuxer</a>(api 18)、<a href="https://developer.android.com/reference/android/media/MediaCrypto.html" target="_blank" rel="external">MediaCrypto</a>(api 16)、<a href="https://developer.android.com/reference/android/media/MediaDrm.html" target="_blank" rel="external">MediaDrm</a>(api 18)、<a href="https://developer.android.com/reference/android/media/Image.html" target="_blank" rel="external">Image</a>(api 19)、<a href="https://developer.android.com/reference/android/view/Surface.html" target="_blank" rel="external">Surface</a>(api 1)、<a href="https://developer.android.com/reference/android/media/AudioTrack.html" target="_blank" rel="external">AudioTrack</a>(api 3)搭配使用）。</p>
-<p><img src="https://i.postimg.cc/pXBt1c9P/Screenshot-2019-07-27-at-15-44-44.png" alt=""></p>
+<p><img src="https://i.postimg.cc/pXBt1c9P/Screenshot-2019-07-27-at-15-44-44.png" width="600px"></p>
 <p>宽泛的说，codec（编解码器）通过异步的方式对输入的数据进行处理，输出处理后的数据，过程中需要一系列的输入/输出Buffers。最简单的情况下，先把数据放进一个空的输入buffer（申请或者获取得到）中，发送给codec，codec对数据进行处理转换后放进一个输出buffer中，拿到输出buffer后，自行处理输出buffer中的数据，之后释放输出buffer并返回给codec。<br><a id="more"></a></p>
 <h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>codec可以操作三种数据：压缩过的数据、raw格式audio数据、raw格式video数据。</p>
 <p>这三种数据都可以用ByteBuffers进行处理。<br>但是处理raw video数据时，应该使用Surface以增强性能。Surface使用native层buffer，没有经过映射、拷贝到ByteBuffers，所以效率更高。正常情况下，使用Surface时获取不到raw格式的video数据，需要通过ImageReader类获取raw格式的video帧数据，由于native层的buffers可以直接映射为ByteBuffer，所以效率依然很高。<br>当使用ByteBuffer模式时，通过Image类的getInput()/OutputImage(int)方法，就可以得到raw格式的video帧数据。</p>
@@ -391,7 +391,8 @@
 <li>Executing：包含Flushed、Running、End-of-Stream三种子状态。</li>
 <li>Released</li>
 </ul>
-<p>MediaCodec状态<br><img src="https://i.postimg.cc/pL6KbHyv/Screenshot-2019-07-27-at-15-45-02.png" alt=""></p>
+<p>MediaCodec状态</p>
+<p><img src="https://i.postimg.cc/pL6KbHyv/Screenshot-2019-07-27-at-15-45-02.png" width="500px"></p>
 <p>当用工厂方法创建一个codec时，codec处于Uninitialized状态。首先通过configure(……)方法注册codec，使其处于Configure状态；然后调用start()方法使其进入Executing状态，在这个状态下，就可以通过buffer队列处理数据。<br>Executing有三个子状态：Flushed、Running、End-of-Stream。在调用start()之后codec立即进入Flushed状态，持有所有的buffers；当从buffer队列拿到第一个输入buffer时，codec进入Running状态，codec整个生命周期的大部分时间都处在这个状态；当输入buffer是end-of-stream标示时，codec切换到End-of-Stream状态，这个状态下，codec不再接收输入buffer，但是仍然生成输出buffer，直到遇见输出buffer的end-of-stream标示。在Executing状态下，可以通过调用flush()方法，使codec在任何时候切换回Flushed状态。<br>当调用stop()方法后，codec返回到Uninitialized状态，可以再次Configured。在codec使用结束后，必须调用release()方法释放codec。<br>在极少数情况下，codec可能遇到error进入Error状态。这是队列操作的无效返回值或者exception进行通讯的。这时可以调用reset()方法就可以使codec再次可用，也可以在任何状态下调用reset()方法，使codec返回到Uninitialized状态，否则就应该调用release()方法释放。</p>
 <h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><p>使用MediaCodecList创建一个制定媒体格式（MediaFormat）的MediaCodec。当解码文件或者流时，可以通过MediaExtractor.getTrackFormat获取所需的格式，如果需要注入特定的特性，可以通过MediaFormat.setFeatureEnabled添加；然后调用MediaCodecList.findDecoderForFormat获取能够处理这种媒体格式的codec的名称；最后，使用createByCodecName(String)创建codec。</p>
 <blockquote>
@@ -407,7 +408,8 @@
 <p>编码器（或生成压缩数据的codec）将在标有codec-config标志的输出buffer中的任何有效输出buffer之前创建并返回 codec specific data。 包含codec-specific-data的buffer没有有意义的时间戳。</p>
 <h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>在调用api时，每个codec都持有一系列被buffer-ID引用的输入/输出buffer，当成功的start()后，客户端拥有既不输入也不输出的buffer。在同步模式下，调用dequeueInput/OutputBuffer(……)从codec中获取一个输入/输出buffer；在异步模式下，通过MediaCodec.Callback.onInput/OutputBufferAvailable(……)回调函数会自动接收到可用的buffer。<br>在获取输入buffer时，放入数据后通过queueInputBuffer或者queueSecureInputBuffer（如果使用decryption）提交给codec。不要提交多个具有相同时间戳的输入buffer（除非是标记为 codec-specific data）<br>在异步模式下，codec会通过onOutputBufferAvailable回调函数返回一个只读的输出buffer；在同步模式下，调用dequeuOutputBuffer函数获取只读的输出buffer。当输出buffer处理完毕后，调用其中一个的releaseOutputBuffer的方法，将buffer返回给codec。<br>当不需要立即向codec提交或者释放buffer时，持有输入/输出buffer可能造成codec停止，视设备而定。<strong>具体来说，codec可能会推迟生成输出buffer，直到所有未完成的buffer都被提交或者释放</strong>，所以要尽少的持有可用的buffer。<br>根据API的版本，有三种处理数据的方式：<br><img src="https://i.postimg.cc/wxNzDcDQ/Screenshot-2019-07-27-at-16-08-39.png" alt=""></p>
 <h3 id="使用Buffers异步处理"><a href="#使用Buffers异步处理" class="headerlink" title="使用Buffers异步处理"></a>使用Buffers异步处理</h3><p>从<code>android LOLLIPOP(api 21, 5.0)</code>开始，首选异步处理数据，在调用configure之前，设置一个回调函数，异步模式下，因为要让codec进入Running子状态接收输入buffer，所以必须在flush()之后调用start()，这就会使codec状态发生改变。同样，在初始调用下启动的codec将会直接进入到Running子状态，通过回调函数开始传递可用的输入buffer。</p>
-<p>MediaCodec异步流程<br><img src="https://i.postimg.cc/wMgwyphP/Screenshot-2019-07-27-at-16-08-48.png" alt=""></p>
+<p>MediaCodec异步流程</p>
+<p><img src="https://i.postimg.cc/wMgwyphP/Screenshot-2019-07-27-at-16-08-48.png" width="500px"></p>
 <p>MediaCodec在异步模式下的用法如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">MediaCodec codec = MediaCodec.createByCodecName(name);</div><div class="line">MediaFormat mOutputFormat; // member variable</div><div class="line">codec.setCallback(new MediaCodec.Callback() &#123;</div><div class="line">  @Override</div><div class="line">  void onInputBufferAvailable(MediaCodec mc, int inputBufferId) &#123;</div><div class="line">    ByteBuffer inputBuffer = codec.getInputBuffer(inputBufferId);</div><div class="line">    // fill inputBuffer with valid data</div><div class="line">    …</div><div class="line">    codec.queueInputBuffer(inputBufferId, …);</div><div class="line">  &#125;</div><div class="line">  @Override</div><div class="line">  void onOutputBufferAvailable(MediaCodec mc, int outputBufferId, …) &#123;</div><div class="line">    ByteBuffer outputBuffer = codec.getOutputBuffer(outputBufferId);</div><div class="line">    MediaFormat bufferFormat = codec.getOutputFormat(outputBufferId); // option A</div><div class="line">    // bufferFormat is equivalent to mOutputFormat</div><div class="line">    // outputBuffer is ready to be processed or rendered.</div><div class="line">    …</div><div class="line">    codec.releaseOutputBuffer(outputBufferId, …);</div><div class="line">  &#125;</div><div class="line">  @Override</div><div class="line">  void onOutputFormatChanged(MediaCodec mc, MediaFormat format) &#123;</div><div class="line">    // Subsequent data will conform to new format.</div><div class="line">    // Can ignore if using getOutputFormat(outputBufferId)</div><div class="line">    mOutputFormat = format; // option B</div><div class="line">  &#125;</div><div class="line">  @Override</div><div class="line">  void onError(…) &#123;</div><div class="line">    …</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">codec.configure(format, …);</div><div class="line">mOutputFormat = codec.getOutputFormat(); // option B</div><div class="line">codec.start();</div><div class="line">// wait for processing to complete</div><div class="line">codec.stop();</div><div class="line">codec.release();</div></pre></td></tr></table></figure></p>
 <h3 id="使用Buffers同步处理"><a href="#使用Buffers同步处理" class="headerlink" title="使用Buffers同步处理"></a>使用Buffers同步处理</h3><p>从<code>android LOLLIPOP</code>开始，即使在同步模式下使用codec也应该通过getInput/OutputBuffer(int)/getInput/OutputImage(int) 来获取输入/输出buffer，这样可以让框架层进行一些优化，如处理动态内容。如果使用getInput/OutputBuffers()则优化将禁用。</p>
 <blockquote>
@@ -451,8 +453,8 @@
 <li>fatal errors（致命错误）：如果isRecoverable（）和isTransient（）都返回false，则CodecException是致命的，codec必须reset或released。<br>isRecoverable（）和isTransient（）不会同时返回true</li>
 </ul>
 <h2 id="有效的API调用及历史"><a href="#有效的API调用及历史" class="headerlink" title="有效的API调用及历史"></a>有效的API调用及历史</h2><p>本节简要说明了在各个状态下有效的API调用以及MediaCodeC的api历史。 API版本可查看<a href="https://developer.android.com/reference/android/os/Build.VERSION_CODES.html" target="_blank" rel="external">Build.VESION_CODES</a></p>
-<p><img src="https://i.postimg.cc/ZRB1J4Th/Screenshot-2019-07-27-at-16-20-36.png" alt=""></p>
-<p><img src="https://i.postimg.cc/6QSmjgCb/Screenshot-2019-07-27-at-16-24-02.png" alt=""></p>
+<p><img src="https://i.loli.net/2019/11/03/fHd6wam92eNXPTY.png" align="right" width="300px"></p>
+<p><img src="https://i.loli.net/2019/11/03/jKzrn3V4IHCxFef.png" align="right" width="700px"></p>
 
     </div>
 
