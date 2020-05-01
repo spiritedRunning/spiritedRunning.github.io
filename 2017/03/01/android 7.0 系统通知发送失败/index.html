@@ -64,16 +64,15 @@
 <meta property="og:url" content="https://spiritedrunning.github.io/2017/03/01/android 7.0 系统通知发送失败/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
 <meta property="og:description" content="项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：1234567891011121314151617java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-<meta property="og:image" content="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png">
-<meta property="og:image" content="https://i.postimg.cc/VNsZ4M56/Screenshot-2019-07-27-at-16-46-51.png">
-<meta property="og:image" content="https://i.postimg.cc/x163fZTf/Screenshot-2019-07-27-at-16-47-10.png">
-<meta property="og:image" content="https://i.postimg.cc/1XKNWg8m/Picture1.png">
-<meta property="og:image" content="https://i.postimg.cc/fLc3L3jc/Picture2.png">
-<meta property="og:updated_time" content="2019-07-28T03:12:01.264Z">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/oqAThv1N5iptLUK.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/62OGyTeLY8FjhdQ.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/bd3PKAHFDLsJ82C.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/VUQ3frap5GsT6wE.jpg">
+<meta property="og:updated_time" content="2020-05-01T10:51:05.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android 7.0 系统通知发送失败">
 <meta name="twitter:description" content="项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：1234567891011121314151617java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-<meta name="twitter:image" content="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/oqAThv1N5iptLUK.jpg">
   <link rel="canonical" href="https://spiritedrunning.github.io/2017/03/01/android 7.0 系统通知发送失败/">
 
 
@@ -278,7 +277,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-28 11:12:01" itemprop="dateModified" datetime="2019-07-28T11:12:01+08:00">2019-07-28</time>
+                <time title="修改时间：2020-05-01 18:51:05" itemprop="dateModified" datetime="2020-05-01T18:51:05+08:00">2020-05-01</time>
               </span>
             
           
@@ -362,11 +361,11 @@
 <p>开始我有2个怀疑点：<br>1、7.0 修改了Notification的构建方式。 但查看api更新说明，没有提及。<br>2、当时测出问题是在Nexus6, 从这个权限名来看 MANAGE_USERS，怀疑与系统的用户管理权限有关。</p>
 <p>后来经过很长时间终于找到这个问题的根本原因。</p>
 <p>首先重建一个Demo在7.0上测试一切正常，说明很有可能是我们自己工程的问题，后来发现在我们工程自定义的MyApplication有一个方法叫getUserId(), 而在Notification构建时发现有一个相同的方法。</p>
-<p>api 24(Android 7.0）：<br><img src="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png" alt=""><br><img src="https://i.postimg.cc/VNsZ4M56/Screenshot-2019-07-27-at-16-46-51.png" alt=""></p>
+<p>api 24(Android 7.0）：<br><img src="https://i.loli.net/2020/05/01/oqAThv1N5iptLUK.jpg" style="zoom:40%"></p>
 <p>由于这个Context 在Builder构造的时候传的是Application context, 所以很大可能就是和系统方法冲突了。</p>
 <p>但是我又看了下，7.0以前的代码也有同样的方法，只是位置略有不同，至此还是不能解释为什么只有7.0有问题。</p>
-<p>api 23(Android 6.0):<br><img src="https://i.postimg.cc/x163fZTf/Screenshot-2019-07-27-at-16-47-10.png" alt=""></p>
-<p>然后我又找出framework对应的代码版本，7.0.0_r1, 有一段提交记录：<br><img src="https://i.postimg.cc/1XKNWg8m/Picture1.png" alt=""><br><img src="https://i.postimg.cc/fLc3L3jc/Picture2.png" alt=""></p>
+<p>api 23(Android 6.0):<br><img src="https://i.loli.net/2020/05/01/62OGyTeLY8FjhdQ.jpg" style="zoom:40%"></p>
+<p>然后我又找出framework对应的代码版本，7.0.0_r1, 有一段提交记录：<br><img src="https://i.loli.net/2020/05/01/bd3PKAHFDLsJ82C.jpg" style="zoom:40%"><br><img src="https://i.loli.net/2020/05/01/VUQ3frap5GsT6wE.jpg" style="zoom:40%"></p>
 <p>注意到有一个callingUserId != userId 的权限判断。 我猜测userId正是前面getUserId得到的， 如果用了自己代码中得到的id肯定是错误的，才会抛出这个异常。</p>
 <p>重命名自己的getUserId方法后，通知功能一切正常，至此验证了此猜测的正确性。后面有时间再仔细研究一下这里的userId的含义以及具体是如何获取到的。</p>
 
