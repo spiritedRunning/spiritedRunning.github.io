@@ -57,24 +57,18 @@
   };
 </script>
 
-  <meta name="description" content="项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：1234567891011121314151617java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-<meta name="keywords" content="7,Notification">
+  <meta name="description" content="​     BlockingQueue接口主要用于解决生产者-消费者问题。 当从队列中获取或移除元素时，如果队列为空，需要等待，直到队列不空；同时如果向队列中添加元素时，如果队列无可用空间，也需要等待。 ​    BlockingQueue的实现是线程安全的，如果你试图向队列中存入null将抛出异常。它的实现类包括ArrayBlockingQueue，LinkedBlockingQueue，Pri">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android 7.0 系统通知发送失败">
-<meta property="og:url" content="https://spiritedrunning.github.io/2017/03/01/android 7.0 系统通知发送失败/index.html">
+<meta property="og:title" content="阻塞队列实现生产者-消费者模式">
+<meta property="og:url" content="https://spiritedrunning.github.io/2020/05/01/阻塞队列实现生产者-消费者模式/index.html">
 <meta property="og:site_name" content="Zach&#39;s Blog">
-<meta property="og:description" content="项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：1234567891011121314151617java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-<meta property="og:image" content="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png">
-<meta property="og:image" content="https://i.postimg.cc/VNsZ4M56/Screenshot-2019-07-27-at-16-46-51.png">
-<meta property="og:image" content="https://i.postimg.cc/x163fZTf/Screenshot-2019-07-27-at-16-47-10.png">
-<meta property="og:image" content="https://i.postimg.cc/1XKNWg8m/Picture1.png">
-<meta property="og:image" content="https://i.postimg.cc/fLc3L3jc/Picture2.png">
-<meta property="og:updated_time" content="2019-07-28T03:12:01.264Z">
+<meta property="og:description" content="​     BlockingQueue接口主要用于解决生产者-消费者问题。 当从队列中获取或移除元素时，如果队列为空，需要等待，直到队列不空；同时如果向队列中添加元素时，如果队列无可用空间，也需要等待。 ​    BlockingQueue的实现是线程安全的，如果你试图向队列中存入null将抛出异常。它的实现类包括ArrayBlockingQueue，LinkedBlockingQueue，Pri">
+<meta property="og:updated_time" content="2020-05-01T09:48:39.336Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android 7.0 系统通知发送失败">
-<meta name="twitter:description" content="项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：1234567891011121314151617java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group">
-<meta name="twitter:image" content="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png">
-  <link rel="canonical" href="https://spiritedrunning.github.io/2017/03/01/android 7.0 系统通知发送失败/">
+<meta name="twitter:title" content="阻塞队列实现生产者-消费者模式">
+<meta name="twitter:description" content="​     BlockingQueue接口主要用于解决生产者-消费者问题。 当从队列中获取或移除元素时，如果队列为空，需要等待，直到队列不空；同时如果向队列中添加元素时，如果队列无可用空间，也需要等待。 ​    BlockingQueue的实现是线程安全的，如果你试图向队列中存入null将抛出异常。它的实现类包括ArrayBlockingQueue，LinkedBlockingQueue，Pri">
+  <link rel="canonical" href="https://spiritedrunning.github.io/2020/05/01/阻塞队列实现生产者-消费者模式/">
 
 
 <script id="page.configurations">
@@ -83,7 +77,7 @@
   };
 </script>
 
-  <title>android 7.0 系统通知发送失败 | Zach's Blog</title>
+  <title>阻塞队列实现生产者-消费者模式 | Zach's Blog</title>
   
 
 
@@ -231,7 +225,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://spiritedrunning.github.io/2017/03/01/android 7.0 系统通知发送失败/">
+    <link itemprop="mainEntityOfPage" href="https://spiritedrunning.github.io/2020/05/01/阻塞队列实现生产者-消费者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zach Liu">
@@ -245,7 +239,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">android 7.0 系统通知发送失败
+          <h1 class="post-title" itemprop="name headline">阻塞队列实现生产者-消费者模式
 
               
             
@@ -265,37 +259,12 @@
                 
               
 
-              <time title="创建时间：2017-03-01 15:16:24" itemprop="dateCreated datePublished" datetime="2017-03-01T15:16:24+08:00">2017-03-01</time>
+              <time title="创建时间：2020-05-01 17:31:08 / 修改时间：17:48:39" itemprop="dateCreated datePublished" datetime="2020-05-01T17:31:08+08:00">2020-05-01</time>
             </span>
           
             
 
             
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-28 11:12:01" itemprop="dateModified" datetime="2019-07-28T11:12:01+08:00">2019-07-28</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bug/" itemprop="url" rel="index"><span itemprop="name">bug</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -319,8 +288,8 @@
       <span class="post-meta-item-text">评论数：</span>
     
   
-    <a href="/2017/03/01/android 7.0 系统通知发送失败/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/03/01/android 7.0 系统通知发送失败/" itemprop="commentCount"></span>
+    <a href="/2020/05/01/阻塞队列实现生产者-消费者模式/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/01/阻塞队列实现生产者-消费者模式/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -333,7 +302,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">2.3k</span>
+              <span title="本文字数">3k</span>
             </span>
           
             <span class="post-meta-item">
@@ -343,7 +312,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">2 分钟</span>
+              <span title="阅读时长">3 分钟</span>
             </span>
           
 
@@ -356,19 +325,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>项目中突然某一天发现在Android 7.0上后台收不到消息通知了，错误提示如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">java.lang.SecurityException: You need MANAGE_USERS permission to: check if specified user a managed profile outside your profile group</div><div class="line">     at android.os.Parcel.readException(Parcel.java:1683)</div><div class="line">     at android.os.Parcel.readException(Parcel.java:1636)</div><div class="line">     at android.os.IUserManager$Stub$Proxy.isManagedProfile(IUserManager.java:1521)</div><div class="line">     at android.os.UserManager.isManagedProfile(UserManager.java:888)</div><div class="line">     at android.app.ApplicationPackageManager.isManagedProfile(ApplicationPackageManager.java:2363)</div><div class="line">     at android.app.ApplicationPackageManager.getManagedProfileIconForDensity(ApplicationPackageManager.java:1219)</div><div class="line">     at android.app.ApplicationPackageManager.getUserBadgeForDensityNoBackground(ApplicationPackageManager.java:1207)</div><div class="line">     at android.app.Notification$Builder.getProfileBadgeDrawable(Notification.java:3191)</div><div class="line">     at android.app.Notification$Builder.getProfileBadge(Notification.java:3196)</div><div class="line">     at android.app.Notification$Builder.bindProfileBadge(Notification.java:3210)</div><div class="line">     at android.app.Notification$Builder.bindNotificationHeader(Notification.java:3360)</div><div class="line">     at android.app.Notification$Builder.applyStandardTemplate(Notification.java:3279)</div><div class="line">     at android.app.Notification$Builder.applyStandardTemplate(Notification.java:3265)</div><div class="line">     at android.app.Notification$Builder.applyStandardTemplate(Notification.java:3254)</div><div class="line">     at android.app.Notification$Builder.createContent1View(Notification.java:3571)</div><div class="line">     at android.app.Notification$Builder.build(Notification.java:3843)</div></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<p>我尝试加了MANAGE_USERS权限，看起来是个系统级别权限，验证后果然无效。从报错看可能跟系统用户有关，也许关联了什么权限没有获得。开始只能通过try/catch, 这样在前台可以收到消息。那在后台还是有问题。</p>
-<p>开始我有2个怀疑点：<br>1、7.0 修改了Notification的构建方式。 但查看api更新说明，没有提及。<br>2、当时测出问题是在Nexus6, 从这个权限名来看 MANAGE_USERS，怀疑与系统的用户管理权限有关。</p>
-<p>后来经过很长时间终于找到这个问题的根本原因。</p>
-<p>首先重建一个Demo在7.0上测试一切正常，说明很有可能是我们自己工程的问题，后来发现在我们工程自定义的MyApplication有一个方法叫getUserId(), 而在Notification构建时发现有一个相同的方法。</p>
-<p>api 24(Android 7.0）：<br><img src="https://i.postimg.cc/2Sk158Vv/Screenshot-2019-07-27-at-16-46-15.png" alt=""><br><img src="https://i.postimg.cc/VNsZ4M56/Screenshot-2019-07-27-at-16-46-51.png" alt=""></p>
-<p>由于这个Context 在Builder构造的时候传的是Application context, 所以很大可能就是和系统方法冲突了。</p>
-<p>但是我又看了下，7.0以前的代码也有同样的方法，只是位置略有不同，至此还是不能解释为什么只有7.0有问题。</p>
-<p>api 23(Android 6.0):<br><img src="https://i.postimg.cc/x163fZTf/Screenshot-2019-07-27-at-16-47-10.png" alt=""></p>
-<p>然后我又找出framework对应的代码版本，7.0.0_r1, 有一段提交记录：<br><img src="https://i.postimg.cc/1XKNWg8m/Picture1.png" alt=""><br><img src="https://i.postimg.cc/fLc3L3jc/Picture2.png" alt=""></p>
-<p>注意到有一个callingUserId != userId 的权限判断。 我猜测userId正是前面getUserId得到的， 如果用了自己代码中得到的id肯定是错误的，才会抛出这个异常。</p>
-<p>重命名自己的getUserId方法后，通知功能一切正常，至此验证了此猜测的正确性。后面有时间再仔细研究一下这里的userId的含义以及具体是如何获取到的。</p>
+        <p>​     BlockingQueue接口主要用于解决生产者-消费者问题。 当从队列中获取或移除元素时，如果队列为空，需要等待，直到队列不空；同时如果向队列中添加元素时，如果队列无可用空间，也需要等待。</p>
+<p>​    BlockingQueue的实现是线程安全的，如果你试图向队列中存入null将抛出异常。它的实现类包括ArrayBlockingQueue，LinkedBlockingQueue，PriorityBlockingQueue，DelayQueue ：</p>
+<p>　　ArrayBlockingQueue：基于数组实现的一个阻塞队列，在创建ArrayBlockingQueue对象时必须制定容量大小。并且可以指定公平性与非公平性，默认情况下为非公平的，即不保证等待时间最长的队列最优先能够访问队列。 </p>
+<p>　　LinkedBlockingQueue：基于链表实现的一个阻塞队列，在创建LinkedBlockingQueue对象时如果不指定容量大小，则默认大小为Integer.MAX_VALUE。 </p>
+<p>　　PriorityBlockingQueue：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。 </p>
+<p>　　DelayQueue：基于PriorityQueue，一种延时阻塞队列，DelayQueue中的元素只有当其指定的延迟时间到了，才能够从队列中获取到该元素。DelayQueue也是一个无界队列，因此往队列中插入数据的操作（生产者）永远不会被阻塞，而只有获取数据的操作（消费者）才会被阻塞。</p>
+<p>几个重要方法：</p>
+<p>· put(E e): 向队列中插入元素，如果队列已满，则需要等待</p>
+<p>· E take(): 从队列头部获取并移除元素，如果队列为空则需要等待可用的元素</p>
+<p>以下使用ArrayBlockingQueue来实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Message</span> </span>&#123; </div><div class="line">    <span class="keyword">private</span> String msg; </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Message</span><span class="params">(String msg)</span> </span>&#123; </div><div class="line">        <span class="keyword">this</span>.msg = msg; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMsg</span><span class="params">()</span> </span>&#123; </div><div class="line">        <span class="keyword">return</span> msg; </div><div class="line">    &#125; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 消费者</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123; </div><div class="line">    <span class="keyword">private</span> BlockingQueue&lt;Message&gt; queue; </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">(BlockingQueue q)</span> </span>&#123; </div><div class="line">        <span class="keyword">this</span>.queue = q; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    <span class="meta">@Override</span> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </div><div class="line">        <span class="keyword">try</span> &#123; </div><div class="line">            Message msg; </div><div class="line"> </div><div class="line">            <span class="keyword">while</span> (!(msg = queue.take()).getMsg().equals(<span class="string">"exit"</span>)) &#123; </div><div class="line">                Thread.sleep(<span class="number">100</span>); </div><div class="line">                System.out.println(<span class="string">"Consumed "</span> + msg.getMsg()); </div><div class="line">            &#125; </div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 生产者</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123; </div><div class="line">    <span class="keyword">private</span> BlockingQueue&lt;Message&gt; queue; </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producer</span><span class="params">(BlockingQueue&lt;Message&gt; q)</span> </span>&#123; </div><div class="line">        <span class="keyword">this</span>.queue = q; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    <span class="meta">@Override</span> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123; </div><div class="line">            Message msg = <span class="keyword">new</span> Message(<span class="string">""</span> + i); </div><div class="line">            <span class="keyword">try</span> &#123; </div><div class="line">                Thread.sleep(i); </div><div class="line">                queue.put(msg); </div><div class="line">                System.out.println(<span class="string">"produced "</span> + msg.getMsg()); </div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; </div><div class="line">                e.printStackTrace(); </div><div class="line">            &#125; </div><div class="line">        &#125; </div><div class="line"> </div><div class="line">        <span class="comment">// 添加退出 </span></div><div class="line">        Message msg = <span class="keyword">new</span> Message(<span class="string">"exit"</span>); </div><div class="line">        <span class="keyword">try</span> &#123; </div><div class="line">            queue.put(msg); </div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerConsumerService</span> </span>&#123; </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123; </div><div class="line">        BlockingQueue&lt;Message&gt; queue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">10</span>); </div><div class="line">        Producer producer = <span class="keyword">new</span> Producer(queue); </div><div class="line">        Consumer consumer = <span class="keyword">new</span> Consumer(queue); </div><div class="line"> </div><div class="line">        <span class="keyword">new</span> Thread(producer).start(); </div><div class="line">        <span class="keyword">new</span> Thread(consumer).start(); </div><div class="line">        System.out.println(<span class="string">"producer and consumer has been started"</span>); </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="https://www.cnblogs.com/tonyspark/p/3722013.html" target="_blank" rel="external">Java BlockingQueue Example</a></p>
 
     </div>
 
@@ -405,22 +373,20 @@
           
         
         <div class="post-tags">
-            <a href="/tags/7/" rel="tag"># 7</a>
-          
-            <a href="/tags/Notification/" rel="tag"># Notification</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+              <a href="/2019/11/01/为什么要有WebSocket/" rel="next" title="WebSocket 简介">
+                <i class="fa fa-chevron-left"></i> WebSocket 简介
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-              <a href="/2017/09/19/MediaCodeC-stuff/" rel="prev" title="MediaCodeC stuff">
-                MediaCodeC stuff <i class="fa fa-chevron-right"></i>
-              </a>
-            
           </div>
         </div>
     </footer>
